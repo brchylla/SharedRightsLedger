@@ -15,15 +15,13 @@
 namespace org.artistrights.sample
 
 asset Photo identified by photoId {
-	o String photoId
+	  o String photoId
     o DateTime Date
     o String Location
     --> Model photoModel
     --> Photographer photographer
-    --> ModelRights modelRights
     --> Rights photoRights
 }
-
 
 asset Rights identified by rightsGroup {
     o String rightsGroup
@@ -34,35 +32,49 @@ asset Rights identified by rightsGroup {
 }
 
 participant Model identified by modelId {
-	o String modelId
+	  o String modelId
     o String modelName
     o String modelEmail
     o Integer modelPhone
     --> Photo[] photos
 }
 
-participant Photographer identified by photogId {
-  	o String photogId
-    o String photogName
-    o String photogEmail
+participant Customer identified by customerID {
+    o String customerID
+    o String name
+    o String email
+    o Integer phone
     --> Photo[] photos
 }
 
-participant Agent identified by agentId {
-	o String agentId
-    o String agentName
+participant Photographer extends Customer {
+    o String cameraDesc
+}
+
+participant Agent extends Customer {
     o String agentCompany
-    o String agentEmail
-    o Integer agentPhone
-    --> Photo[] photos
+ }
+
+participant Client extends Customer {
+    o String artPreferences
 }
 
-participant Client identified by clientID {
-    o String clientID
-    o String clientName
-    o String clientEmail
-    o Integer clientPhone
-    --> Photo[] photos
+transaction takePhoto {
+    --> Model photoModel
+    --> Photographer photographer
 }
 
-transaction assignment
+transaction sellToAgent {
+    --> Photographer photographer
+    --> Agent agent
+}
+
+transaction sellDirect {
+    --> Photographer protographer
+    --> Client directCustomer
+}
+
+transaction sellToClient {
+    --> Agent protographer
+    --> Client agencyCustomer
+}
