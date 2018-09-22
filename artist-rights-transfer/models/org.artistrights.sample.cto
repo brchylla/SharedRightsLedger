@@ -59,6 +59,9 @@ participant Agent identified by agentId {
 
 participant Client identified by clientID {
     o String clientID
+    o String clientName
+    o String clientEmail
+    o Integer clientPhone
     --> Photo[] photos
 }
 
