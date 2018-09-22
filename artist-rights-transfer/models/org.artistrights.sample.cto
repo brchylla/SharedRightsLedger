@@ -14,41 +14,52 @@
 
 namespace org.artistrights.sample
 
-asset ModelRights identified by rights {
- 	o String rights
-  	o Date 
-  	--> Model
-  	--> Photographer
-    --> Photo
+asset Photo identified by photoId {
+	o String photoId
+    o DateTime Date
+    o String Location
+    --> Model photoModel
+    --> Photographer photographer
+    --> ModelRights modelRights
+    --> Rights photoRights
 }
 
-asset Photo identified by photoId {
-	o Int photoId
-    o String Date
-    o String Location
-    --> Model
-    --> Photographer
-    --> ModelRights
+
+asset Rights identified by rightsGroup {
+    o String rightsGroup
+    o Boolean model
+    o Boolean exclusive
+    o Boolean modify
+    o Boolean retouch
 }
 
 participant Model identified by modelId {
-	o Int modelId
+	o String modelId
     o String modelName
     o String modelEmail
-    o Int modelPhone
+    o Integer modelPhone
+    --> Photo[] photos
 }
 
 participant Photographer identified by photogId {
-  	o Int photogId
+  	o String photogId
     o String photogName
     o String photogEmail
-    o Int Photo[] photos
+    --> Photo[] photos
 }
 
 participant Agent identified by agentId {
-	o Int agentId
+	o String agentId
     o String agentName
     o String agentCompany
     o String agentEmail
-    o Int agentPhone
+    o Integer agentPhone
+    --> Photo[] photos
 }
+
+participant Client identified by clientID {
+    o String clientID
+    --> Photo[] photos
+}
+
+transaction assignment
