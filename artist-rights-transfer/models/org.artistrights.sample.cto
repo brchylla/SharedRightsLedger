@@ -78,7 +78,7 @@ transaction sellToAgent {
 }
 
 transaction sellDirect {
-  --> Photographer protographer
+  --> Photographer photographer
   --> Client directCustomer
   --> Photo photo
 }
@@ -118,6 +118,10 @@ event PhotographerUpdatedNotification {
 
 event AgentUpdatedNotification {
   --> Agent agent
+}
+
+event ClientUpdatedNotification {
+  --> Client directCustomer
 }
 
 event ExclusiveFailNotification {}
