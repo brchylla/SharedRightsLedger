@@ -4,7 +4,7 @@
  */
 
 query getPhotoFromArray {
-    description: "Retrieves a specific photo from an enities' posession"
+    description: "Retrieves a all instances of a specific photo from the fabric"
       statement: SELECT org.artistrights.sample.Photo
           WHERE (photoId == _$photoId)
 }
@@ -29,8 +29,10 @@ query getClients {
       statement: SELECT org.artistrights.sample.Client
 }
 
-query getPhotosFromCustomer {
+query getCustomer {
     description: "returns the specific customer from a customer base classes by the customer id"
       statement: SELECT org.artistrights.sample.Customer
         WHERE (customerId == _$customerId)
 }
+
+query 
