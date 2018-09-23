@@ -29,7 +29,7 @@ query getClients {
       statement: SELECT org.artistrights.sample.Client
 }
 
-query getCustomer {
+query getCustomerById {
     description: "returns the specific customer from a customer base classes by the customer id"
       statement: SELECT org.artistrights.sample.Customer
         WHERE (customerId == _$customerId)

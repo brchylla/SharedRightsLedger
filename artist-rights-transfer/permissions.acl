@@ -52,13 +52,12 @@ rule rulePhotographersCanCreatePhotos {
 rule rule_PhotographersSeeAndUpdatePhotosEverywhere {
     description: "Photographers can see and update their own photos everywhere"
     participant(p): "org.artistrights.sample.Photographer"
-    operation: READ
+    operation: READ, UPDATE
     resource(photo): "org.artistrights.sample.Photo"
     condition: (p.getIdentifier() == photo.photographer.getIdentifier())
     action: ALLOW
 }
 
-/*
 rule rule_ArbitratorsCanSeeEverything {
     description: "Arbitrators can view the whole fabric"
     participant: "org.artistrights.sample.Arbitrator"
@@ -66,4 +65,3 @@ rule rule_ArbitratorsCanSeeEverything {
     resource: "org.artistrights.sample.*"
     action: ALLOW
 }
-*/
