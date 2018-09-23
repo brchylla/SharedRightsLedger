@@ -103,11 +103,30 @@ async function transferToPhotographer(transfer) {
  */
 async function sellToAgent(sale) {
 
-    // if exclusivity is set to true, alert user that operation cannot be performed
+    // if exclusivity in photographer's photo is set to true, alert user that operation cannot be performed
+    // let photographersPhoto = sale.photographer.photos.filter(
+    //     item => {
+    //         return item.photoId === sale.photo.photoId;
+    //     }
+    // );
+    // if (photographersPhoto.photoRights.exclusive) {
+    //     let exclusiveFailNotification = getFactory().newEvent('org.artistrights.sample', 'ExclusiveFailNotification');
+    //     emit(exclusiveFailNotification);
+    //     return;
+    // }
+
+    // delete photo from photographer's collection if it's exclusive
     if (sale.photo.photoRights.exclusive) {
-        let exclusiveFailNotification = getFactory().newEvent('org.artistrights.sample', 'ExclusiveFailNotification');
-        emit(exclusiveFailNotification);
-        return;
+        let photographerRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
+        sale.photographer.photos = sale.photographer.photos.filter(
+            item => {
+                return item.photoId !== sale.photo.photoId;
+            }
+        );
+        let photographerUpdatedNotification = getFactory().newEvent('org.artistrights.sample', 'PhotographerUpdatedNotification');
+        photographerUpdatedNotification.photographer = sale.photographer;
+        emit(photographerUpdatedNotification);
+        await photographerRegistry.update(sale.photographer);
     }
     
     // add photo to agent's collection
