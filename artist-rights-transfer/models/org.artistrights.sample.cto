@@ -25,7 +25,7 @@ asset Photo identified by photoId {
 
 asset Rights identified by rightsGroup {
   o String rightsGroup
-  o Boolean model default = false
+  o Boolean modelReleased default = false
   o Boolean exclusive default = false
   o Boolean modify default = false
   o Boolean retouch default = false
@@ -48,15 +48,15 @@ participant Customer identified by customerID {
 }
 
 participant Photographer extends Customer {
-  o String cameraDesc
+  o String cameraDesc optional
 }
 
 participant Agent extends Customer {
-  o String agentCompany
+  o String agentCompany optional
  }
 
 participant Client extends Customer {
-  o String artPreferences
+  o String artPreferences optional
 }
 
 transaction takePhoto {
@@ -98,7 +98,9 @@ event PhotoTakenNotification {
   --> Photo photo
 }
 
-event PhotoSoldNotification {
+event PhotoTransferredNotification {
+  --> Model model
+  --> Photographer photographer
   --> Photo photo
 }
 
@@ -109,3 +111,13 @@ event RightsModifiedNotification {
 event ModelUpdatedNotification {
   --> Model model
 }
+
+event PhotographerUpdatedNotification {
+  --> Photographer photographer
+}
+
+event AgentUpdatedNotification {
+  --> Agent agent
+}
+
+event ExclusiveFailNotification {}
