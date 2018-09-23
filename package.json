@@ -53,5 +53,8 @@
       }
     },
     "insert_license": false
+  },
+  "dependencies": {
+    "winston": "^3.1.0"
   }
 }
