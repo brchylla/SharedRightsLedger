@@ -89,9 +89,8 @@ transaction sellToClient {
   --> Photo photo
 }
 
-transaction modifyRights {
+transaction setPhotoExclusive {
   --> Photo photo
-  --> Rights rights
 }
 
 event PhotoTakenNotification {
