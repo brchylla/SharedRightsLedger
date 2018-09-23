@@ -1,0 +1,36 @@
+/*
+ * Queries declaration for org.artistrights.sample
+ * Authors Ben Chylla and Drew Burns
+ */
+
+query getPhotoFromArray {
+    description: "Retrieves a specific photo from an enities' posession"
+      statement: SELECT org.artistrights.sample.Photo
+          WHERE (photoId == _$photoId)
+}
+
+query getPhotographers {
+    description: "Retrieves all Photographers"
+      statement: SELECT org.artistrights.sample.Photographer
+}
+
+query getModels {
+    description: "Retrieves all Models"
+      statement: SELECT org.artistrights.sample.Model
+}
+
+query getAgents {
+    description: "Returns all Agents"
+      statement: SELECT org.artistrights.sample.Agent
+}
+
+query getClients {
+    description: "Returns all Clients"
+      statement: SELECT org.artistrights.sample.Client
+}
+
+query getPhotosFromCustomer {
+    description: "returns the specific customer from a customer base classes by the customer id"
+      statement: SELECT org.artistrights.sample.Customer
+        WHERE (customerId == _$customerId)
+}
