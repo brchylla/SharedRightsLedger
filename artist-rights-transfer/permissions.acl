@@ -27,6 +27,55 @@ rule SystemACL {
   description:  "System ACL to permit all access"
   participant: "ANY"
   operation: ALL
-  resource: "org.hyperledger.composer.system.**"
+  resource: "org.hyperledger.composer.system.*"
   action: ALLOW
+}
+
+rule rule_ModelsSeeThemselvesOnly {
+    description: "Models can see their own record only"
+    participant(m): "org.artistrights.sample.Model"
+    operation: READ
+    resource(p): "org.artistrights.sample.Photo"
+    condition: (m.getIdentifier() == p.photoModel.getIdentifier())
+    action: ALLOW
+}
+
+rule rulePhotographersCanCreatePhotos {
+    description: "Photographers can create photos"
+    participant(m): "org.artistrights.sample.Photographer"
+    operation: CREATE
+    resource(p): "org.artistrights.sample.Photo"
+    condition: (m.getIdentifier() == p.photographer.getIdentifier())
+    action: ALLOW
+}
+
+rule rule_PhotographersSeeAndUpdatePhotosEverywhere {
+    description: "Photographers can see and update their own photos everywhere"
+    participant(p): "org.artistrights.sample.Photographer"
+    operation: READ
+    resource(photo): "org.artistrights.sample.Photo"
+    condition: (p.getIdentifier() == photo.photographer.getIdentifier())
+    action: ALLOW
+}
+
+rule rule_PhotographersCanModifyPhotosFromModels {
+
+}
+
+rule rule_AgentsCanSeeAndUpdatePhotosFromPhotographers {
+
+
+}
+
+rule rule_ClientsCanSeeTheirOwnPhotos {
+
+
+}
+
+rule rule_ArbitratorsCanSeeEverything {
+    description: "Arbitrators can view the whole fabric"
+    participant: "org.artistrights.sample.Arbitrator"
+    operation: READ
+    resource: "org.artistrights.sample.*"
+    action: ALLOW
 }
