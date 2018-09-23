@@ -103,18 +103,6 @@ async function transferToPhotographer(transfer) {
  */
 async function sellToAgent(sale) {
 
-    // if exclusivity in photographer's photo is set to true, alert user that operation cannot be performed
-    // let photographersPhoto = sale.photographer.photos.filter(
-    //     item => {
-    //         return item.photoId === sale.photo.photoId;
-    //     }
-    // );
-    // if (photographersPhoto.photoRights.exclusive) {
-    //     let exclusiveFailNotification = getFactory().newEvent('org.artistrights.sample', 'ExclusiveFailNotification');
-    //     emit(exclusiveFailNotification);
-    //     return;
-    // }
-
     // delete photo from photographer's collection if it's exclusive
     if (sale.photo.photoRights.exclusive) {
         let photographerRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
@@ -151,7 +139,6 @@ async function sellDirect(directSale) {
         let photographerRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
         directSale.photographer.photos = directSale.photographer.photos.filter(
             item => {
-                console.log("inside Item");
                 return item.photoId !== directSale.photo.photoId;
             }
         );
@@ -171,5 +158,34 @@ async function sellDirect(directSale) {
 
 }
 
+/**
+ * Track the sale of a photo from an agent to a client
+ * @param {org.artistrights.sample.sellToClient} sellToClient - the sale to be processed
+ * @transaction
+ */
+async function sellToClient(saleFromAgentToClient) {
+    
+    // delete photo from agent's collection if it's exclusive
+    if (saleFromAgentToClient.photo.photoRights.exclusive) {
+        let agentRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
+        saleFromAgentToClient.agent.photos = saleFromAgentToClient.agent.photos.filter(
+            item => {
+                return item.photoId !== saleFromAgentToClient.photo.photoId;
+            }
+        );
+        let agentUpdatedNotification = getFactory().newEvent('org.artistrights.sample', 'AgentUpdatedNotification');
+        agentUpdatedNotification.agent = saleFromAgentToClient.agent;
+        emit(agentUpdatedNotification);
+        await agentRegistry.update(saleFromAgentToClient.agent);
+    }
 
+    // add photo to client's collection
+    let agencyCustomerRegistry = await getParticipantRegistry('org.artistrights.sample.Client');
+    saleFromAgentToClient.agencyCustomer.photos.push(saleFromAgentToClient.photo);
+    let clientUpdatedNotification = getFactory().newEvent('org.artistrights.sample', 'ClientUpdatedNotification');
+    clientUpdatedNotification.agencyCustomer = saleFromAgentToClient.agencyCustomer;
+    emit(clientUpdatedNotification);
+    await agencyCustomerRegistry.update(saleFromAgentToClient.agencyCustomer);
+
+}
 
