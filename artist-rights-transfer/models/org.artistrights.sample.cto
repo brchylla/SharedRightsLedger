@@ -15,66 +15,93 @@
 namespace org.artistrights.sample
 
 asset Photo identified by photoId {
-	  o String photoId
-    o DateTime Date
-    o String Location
-    --> Model photoModel
-    --> Photographer photographer
-    --> Rights photoRights
+	o String photoId
+  o DateTime date
+  o String location
+  --> Model photoModel
+  --> Photographer photographer
+  --> Rights photoRights
 }
 
 asset Rights identified by rightsGroup {
-    o String rightsGroup
-    o Boolean model
-    o Boolean exclusive
-    o Boolean modify
-    o Boolean retouch
+  o String rightsGroup
+  o Boolean model default = false
+  o Boolean exclusive default = false
+  o Boolean modify default = false
+  o Boolean retouch default = false
 }
 
 participant Model identified by modelId {
-	  o String modelId
-    o String modelName
-    o String modelEmail
-    o Integer modelPhone
-    --> Photo[] photos
+	o String modelId
+  o String modelName
+  o String modelEmail
+  o Integer modelPhone
+  --> Photo[] photos optional
 }
 
 participant Customer identified by customerID {
-    o String customerID
-    o String name
-    o String email
-    o Integer phone
-    --> Photo[] photos
+  o String customerID
+  o String name
+  o String email
+  o Integer phone
+  --> Photo[] photos optional
 }
 
 participant Photographer extends Customer {
-    o String cameraDesc
+  o String cameraDesc
 }
 
 participant Agent extends Customer {
-    o String agentCompany
+  o String agentCompany
  }
 
 participant Client extends Customer {
-    o String artPreferences
+  o String artPreferences
 }
 
 transaction takePhoto {
-    --> Model photoModel
-    --> Photographer photographer
+  --> Model photoModel
+  --> Photographer photographer
+  --> Rights photoRights
+}
+
+transaction transferToPhotographer {
+  --> Model model
+  --> Photographer photographer
+  --> Photo photo
 }
 
 transaction sellToAgent {
-    --> Photographer photographer
-    --> Agent agent
+  --> Photographer photographer
+  --> Agent agent
+  --> Photo photo
 }
 
 transaction sellDirect {
-    --> Photographer protographer
-    --> Client directCustomer
+  --> Photographer protographer
+  --> Client directCustomer
+  --> Photo photo
 }
 
 transaction sellToClient {
-    --> Agent protographer
-    --> Client agencyCustomer
+  --> Agent protographer
+  --> Client agencyCustomer
+  --> Photo photo
+}
+
+transaction modifyRights {
+  --> Photo photo
+  --> Rights rights
+}
+
+event PhotoTakenNotification {
+  --> Photo photo
+}
+
+event PhotoSoldNotification {
+  --> Photo photo
+}
+
+event RightsModifiedNotification {
+  --> Rights rights
 }
