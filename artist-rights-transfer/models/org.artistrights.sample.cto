@@ -59,6 +59,11 @@ participant Client extends Customer {
   o String artPreferences optional
 }
 
+participant Arbitrator identified by arbitratorId{
+  o String arbitratorId
+  o String firm
+}
+
 transaction takePhoto {
   --> Model photoModel
   --> Photographer photographer

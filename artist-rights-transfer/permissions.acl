@@ -58,20 +58,7 @@ rule rule_PhotographersSeeAndUpdatePhotosEverywhere {
     action: ALLOW
 }
 
-rule rule_PhotographersCanModifyPhotosFromModels {
-
-}
-
-rule rule_AgentsCanSeeAndUpdatePhotosFromPhotographers {
-
-
-}
-
-rule rule_ClientsCanSeeTheirOwnPhotos {
-
-
-}
-
+/*
 rule rule_ArbitratorsCanSeeEverything {
     description: "Arbitrators can view the whole fabric"
     participant: "org.artistrights.sample.Arbitrator"
@@ -79,3 +66,4 @@ rule rule_ArbitratorsCanSeeEverything {
     resource: "org.artistrights.sample.*"
     action: ALLOW
 }
+*/

@@ -44,14 +44,6 @@ async function takePhoto(capture) {
 async function setPhotoExclusive(modifyPhoto) {
     
     let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
-
-    // let results = query('getPhotoFromFabric');
-    // console.log(results);
-    // if (results.length > 1) {
-    //     let duplicatePhotosFailException = getFactory.newEvent('org.artistrights.sample', 'DuplicatePhotosFailNotification');
-    //     emit(duplicatePhotosFailException);
-    //     return;
-    // }
     
     // modify the rights of the photo
     modifyPhoto.photo.photoRights.exclusive = true;

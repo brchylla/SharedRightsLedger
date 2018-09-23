@@ -1,3 +1,0 @@
-# kickme
-
-test environment
