@@ -38,31 +38,31 @@ async function takePhoto(capture) {
 
 /**
  * Track the modification of rights for a photo
- * @param {org.artistrights.sample.modifyRights} modifyRights - the rights modification to be processed
+ * @param {org.artistrights.sample.setPhotoExclusive} setPhotoExclusive - the rights modification to be processed
  * @transaction
  */
-async function modifyRights(modifyRights) {
+async function setPhotoExclusive(modifyPhoto) {
     
     let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
 
-    let results = query('getPhotoFromFabric');
-    console.log(results);
-    if (results.length > 1) {
-        let duplicatePhotosFailException = getFactory.newEvent('org.artistrights.sample', 'DuplicatePhotosFailNotification');
-        emit(duplicatePhotosFailException);
-        return;
-    }
+    // let results = query('getPhotoFromFabric');
+    // console.log(results);
+    // if (results.length > 1) {
+    //     let duplicatePhotosFailException = getFactory.newEvent('org.artistrights.sample', 'DuplicatePhotosFailNotification');
+    //     emit(duplicatePhotosFailException);
+    //     return;
+    // }
     
     // modify the rights of the photo
-    modifyRights.photo.photoRights = modifyRights.rights;
+    modifyPhoto.photo.photoRights.exclusive = true;
     
     // emit a notification that rights have been modified
-    let rightsModifiedNotification = getFactory().newEvent('org.artistrights.sample', 'RightsModifiedNotification');
-    rightsModifiedNotification.rights = modifyRights.rights;
-    emit(rightsModifiedNotification);
+    let RightsModifiedNotification = getFactory().newEvent('org.artistrights.sample', 'RightsModifiedNotification');
+    RightsModifiedNotification.rights = modifyPhoto.photo.photoRights;
+    emit(RightsModifiedNotification);
 
     // persists the state of the photo
-    await photoRegistry.update(modifyRights.photo);
+    await photoRegistry.update(modifyPhoto.photo);
 
 }
 
