@@ -73,7 +73,11 @@ async function transferToPhotographer(transfer) {
     transfer.photo.photoRights.modelReleased = true;
 
     // delete photo from model's array
-    transfer.model.photos.splice(transfer.model.photos.indexOf(transfer.photo), 1);
+    transfer.model.photos = transfer.model.photos.filter(
+        item => {
+            return item.photoId !== transfer.photo.photoId;
+        }
+    );
 
     // add photo to photographer's array
     transfer.photographer.photos.push(transfer.photo);
@@ -115,4 +119,6 @@ async function sellToAgent(sale) {
     await agentRegistry.update(sale.agent);
 
 }
+
+
 
