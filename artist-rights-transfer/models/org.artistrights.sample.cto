@@ -84,7 +84,7 @@ transaction sellDirect {
 }
 
 transaction sellToClient {
-  --> Agent protographer
+  --> Agent agent
   --> Client agencyCustomer
   --> Photo photo
 }
