@@ -65,19 +65,30 @@ async function modifyRights(modifyRights) {
  */
 async function transferToPhotographer(transfer) {
 
+    let modelRegistry = await getParticipantRegistry('org.artistrights.sample.Model');
     let photographerRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
+    let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
     
-    // changes model status in rights (in photo) from false to true
-    transfer.photo.photoRights.model = true;
+    // changes modelReleased status in rights (in photo) from false to true
+    transfer.photo.photoRights.modelReleased = true;
 
-    // transfer photo from model's array to photographer's array
+    // delete photo from model's array
+    transfer.model.photos.splice(transfer.model.photos.indexOf(transfer.photo), 1);
+
+    // add photo to photographer's array
+    transfer.photographer.photos.push(transfer.photo);
+
+    // emit notification
+    let photoTransferredNotification = getFactory().newEvent('org.artistrights.sample', 'PhotoTransferredNotification');
+    photoTransferredNotification.model = transfer.model;
+    photoTransferredNotification.photographer = transfer.photographer;
+    photoTransferredNotification.photo = transfer.photo;
+    emit(photoTransferredNotification);
     
-
-    // emit notifications that a transfer has occurred (photo, model and photographer)
-    
-
-    // persist the states of the photo, model, and photographer respectively
-
+    // persists the states of the assets and participants above
+    await modelRegistry.update(transfer.model);
+    await photographerRegistry.update(transfer.photographer);
+    await photoRegistry.update(transfer.photo);
 
 }
 
@@ -86,21 +97,21 @@ async function transferToPhotographer(transfer) {
  * @param {org.artistrights.sample.sellToAgent} sellToAgent - the sale to be processed
  * @transaction
  */
-async function sellPhotoToAgent(sale) {
+async function sellToAgent(sale) {
 
-    let photographerRegistry = await getParticipantRegistry('org.artistrights.sample.Photographer');
-    let agentRegistry = await getParticipantRegistry('org.aristrights.sample.Agent');
+    // if exclusivity is set to true, alert user that operation cannot be performed
+    if (sale.photo.photoRights.exclusive) {
+        let exclusiveFailNotification = getFactory().newEvent('org.artistrights.sample', 'ExclusiveFailNotification');
+        emit(exclusiveFailNotification);
+        return;
+    }
     
-    // assign the new owner of the photo
+    // add photo to agent's collection
+    let agentRegistry = await getParticipantRegistry('org.artistrights.sample.Agent');
     sale.agent.photos.push(sale.photo);
-
-    // emit a notification that a sale has occurred
-    let photoSoldNotification = getFactory().newEvent('org.artistrights.sample', 'PhotoSoldNotification');
-    photoSoldNotification.photo = sale.photo;
-    emit(photoSoldNotification);
-
-    // persist the states of the photographer and agent respectively
-    await photographerRegistry.update(sale.photographer);
+    let agentUpdatedNotification = getFactory().newEvent('org.artistrights.sample', 'AgentUpdatedNotification');
+    agentUpdatedNotification.agent = sale.agent;
+    emit(agentUpdatedNotification);
     await agentRegistry.update(sale.agent);
 
 }
