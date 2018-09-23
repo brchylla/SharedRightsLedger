@@ -4,10 +4,11 @@
  * @transaction
  */
 async function takePhoto(capture) {
-
-    let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
     
-    let today = new DateTime();
+    let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
+    let modelRegistry = await getParticipantRegistry('org.artistrights.sample.Model');
+    
+    let today = new Date();
     
     // create the photo JSON object and push to array of photos in model
     let factory = getFactory();
@@ -24,8 +25,14 @@ async function takePhoto(capture) {
     photoTakenNotification.photo = photo;
     emit(photoTakenNotification);
 
+    // emit a notification that photo has been added to model
+    let modelUpdatedNotification = getFactory().newEvent('org.artistrights.sample', 'ModelUpdatedNotification');
+    modelUpdatedNotification.model = capture.photoModel;
+    emit(modelUpdatedNotification);
+
     // persists the state of the photo
     await photoRegistry.add(photo);
+    await modelRegistry.update(capture.photoModel);
 
 }
 

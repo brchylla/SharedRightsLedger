@@ -36,7 +36,7 @@ participant Model identified by modelId {
   o String modelName
   o String modelEmail
   o Integer modelPhone
-  --> Photo[] photos optional
+  --> Photo[] photos
 }
 
 participant Customer identified by customerID {
@@ -44,7 +44,7 @@ participant Customer identified by customerID {
   o String name
   o String email
   o Integer phone
-  --> Photo[] photos optional
+  --> Photo[] photos
 }
 
 participant Photographer extends Customer {
@@ -104,4 +104,8 @@ event PhotoSoldNotification {
 
 event RightsModifiedNotification {
   --> Rights rights
+}
+
+event ModelUpdatedNotification {
+  --> Model model
 }
