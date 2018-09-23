@@ -34,5 +34,3 @@ query getCustomer {
       statement: SELECT org.artistrights.sample.Customer
         WHERE (customerId == _$customerId)
 }
-
-query 
