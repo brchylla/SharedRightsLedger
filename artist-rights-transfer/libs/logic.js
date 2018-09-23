@@ -44,6 +44,14 @@ async function takePhoto(capture) {
 async function modifyRights(modifyRights) {
     
     let photoRegistry = await getAssetRegistry('org.artistrights.sample.Photo');
+
+    let results = query('getPhotoFromFabric');
+    console.log(results);
+    if (results.length > 1) {
+        let duplicatePhotosFailException = getFactory.newEvent('org.artistrights.sample', 'DuplicatePhotosFailNotification');
+        emit(duplicatePhotosFailException);
+        return;
+    }
     
     // modify the rights of the photo
     modifyRights.photo.photoRights = modifyRights.rights;
