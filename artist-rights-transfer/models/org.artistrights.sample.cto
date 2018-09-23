@@ -125,3 +125,5 @@ event ClientUpdatedNotification {
 }
 
 event ExclusiveFailNotification {}
+
+event DuplicatePhotosFailNotification {}

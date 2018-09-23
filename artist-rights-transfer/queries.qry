@@ -3,7 +3,7 @@
  * Authors Ben Chylla and Drew Burns
  */
 
-query getPhotoById {
+query getPhotoFromFabric {
     description: "Retrieves a all instances of a specific photo from the fabric"
       statement: SELECT org.artistrights.sample.Photo
           WHERE (photoId == _$photoId)
